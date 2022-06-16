@@ -1,0 +1,327 @@
+{
+  "name": "Recurring Buy",
+  "nodes": [
+    {
+      "parameters": {},
+      "name": "Start",
+      "type": "n8n-nodes-base.start",
+      "typeVersion": 1,
+      "position": [
+        120,
+        140
+      ]
+    },
+    {
+      "parameters": {
+        "text": "={{$node[\"HTTP Request\"].json[\"execution_results\"][0][\"execution\"]}}"
+      },
+      "name": "Discord",
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 1,
+      "position": [
+        1520,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "={{$node[\"URL\"].parameter[\"values\"][\"string\"][0][\"value\"]}}",
+        "options": {},
+        "bodyParametersUi": {
+          "parameter": [
+            {
+              "name": "apikey",
+              "value": "={{$node[\"key\"].parameter[\"values\"][\"string\"][0][\"value\"]}}"
+            },
+            {
+              "name": "sign",
+              "value": "={{$node[\"Crypto\"].json[\"sign\"]}}"
+            },
+            {
+              "name": "timestamp",
+              "value": "={{$node[\"timestamp\"].json[\"timestamp\"]}}"
+            },
+            {
+              "name": "strategy",
+              "value": "={{$node[\"parameters\"].parameter[\"values\"][\"string\"][0][\"value\"]}}"
+            },
+            {
+              "name": "exchange",
+              "value": "={{$node[\"parameters\"].parameter[\"values\"][\"string\"][1][\"value\"]}}"
+            },
+            {
+              "name": "symbol",
+              "value": "={{$node[\"parameters\"].parameter[\"values\"][\"string\"][4][\"value\"]}}"
+            },
+            {
+              "name": "qty",
+              "value": "={{$node[\"parameters\"].parameter[\"values\"][\"number\"][0][\"value\"]}}"
+            },
+            {
+              "name": "price",
+              "value": "={{$node[\"parameters\"].parameter[\"values\"][\"number\"][1][\"value\"]}}"
+            },
+            {
+              "name": "side",
+              "value": "={{$node[\"parameters\"].parameter[\"values\"][\"string\"][3][\"value\"]}}"
+            },
+            {
+              "name": "memo",
+              "value": "={{$node[\"parameters\"].parameter[\"values\"][\"string\"][5][\"value\"]}}"
+            },
+            {
+              "name": "order_type",
+              "value": "={{$node[\"parameters\"].parameter[\"values\"][\"string\"][2][\"value\"]}}"
+            }
+          ]
+        }
+      },
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        1320,
+        300
+      ],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "triggerTimes": {
+          "item": [
+            {
+              "mode": "everyHour"
+            }
+          ]
+        }
+      },
+      "name": "Cron",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [
+        120,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "action": "hmac",
+        "type": "SHA256",
+        "value": "={{$node[\"timestamp\"].json[\"timestamp\"]}}POST{{$node[\"URL\"].parameter[\"values\"][\"string\"][0][\"value\"]}}",
+        "dataPropertyName": "sign",
+        "secret": "={{$node[\"key\"].parameter[\"values\"][\"string\"][1][\"value\"]}}"
+      },
+      "name": "Crypto",
+      "type": "n8n-nodes-base.crypto",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "strategy",
+              "value": "test_strategy"
+            },
+            {
+              "name": "exchange",
+              "value": "bybit_testnet"
+            },
+            {
+              "name": "order_type",
+              "value": "Market"
+            },
+            {
+              "name": "side",
+              "value": "Buy"
+            },
+            {
+              "name": "symbol",
+              "value": "BTCUSD"
+            },
+            {
+              "name": "memo",
+              "value": "memo"
+            }
+          ],
+          "number": [
+            {
+              "name": "qty",
+              "value": 1
+            },
+            {
+              "name": "price",
+              "value": 10000
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "parameters",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        720,
+        300
+      ],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "apikey"
+            },
+            {
+              "name": "secretkey"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "key",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        320,
+        300
+      ],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "value": "={{new Date()}}",
+        "dataPropertyName": "timestamp",
+        "custom": true,
+        "toFormat": "x",
+        "options": {}
+      },
+      "name": "timestamp",
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 1,
+      "position": [
+        920,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "URL"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "URL",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        520,
+        300
+      ],
+      "alwaysOutputData": true
+    }
+  ],
+  "connections": {
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Discord",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cron": {
+      "main": [
+        [
+          {
+            "node": "key",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crypto": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "parameters": {
+      "main": [
+        [
+          {
+            "node": "timestamp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "key": {
+      "main": [
+        [
+          {
+            "node": "URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "timestamp": {
+      "main": [
+        [
+          {
+            "node": "Crypto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "URL": {
+      "main": [
+        [
+          {
+            "node": "parameters",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "key",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {},
+  "id": 1
+}

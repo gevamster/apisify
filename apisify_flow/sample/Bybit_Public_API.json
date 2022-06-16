@@ -1,0 +1,561 @@
+{
+  "name": "Bybit Public API",
+  "nodes": [
+    {
+      "parameters": {},
+      "name": "Start",
+      "type": "n8n-nodes-base.start",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -640
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://api.bybit.com/v2/public/kline/list",
+        "options": {},
+        "queryParametersUi": {
+          "parameter": [
+            {
+              "name": "symbol",
+              "value": "BTCUSD"
+            },
+            {
+              "name": "interval",
+              "value": "60"
+            },
+            {
+              "name": "limit",
+              "value": "200"
+            },
+            {
+              "name": "from",
+              "value": "={{$node[\"Format\"].json[\"date\"]}}"
+            }
+          ]
+        }
+      },
+      "name": "Bybit Query Kline",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        600,
+        -460
+      ],
+      "notesInFlow": true,
+      "notes": "GET /v2/public/kline/list"
+    },
+    {
+      "parameters": {
+        "value": "={{$node[\"Date\"].json[\"date\"]}}",
+        "dataPropertyName": "date",
+        "custom": true,
+        "toFormat": "X",
+        "options": {}
+      },
+      "name": "Format",
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 1,
+      "position": [
+        400,
+        -460
+      ]
+    },
+    {
+      "parameters": {
+        "action": "calculate",
+        "value": "=={{new Date()}}",
+        "operation": "subtract",
+        "duration": 60,
+        "timeUnit": "minutes",
+        "dataPropertyName": "date",
+        "options": {}
+      },
+      "name": "Date",
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 1,
+      "position": [
+        200,
+        -460
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://api.bybit.com/v2/public/orderBook/L2",
+        "options": {},
+        "queryParametersUi": {
+          "parameter": [
+            {
+              "name": "symbol",
+              "value": "BTCUSD"
+            }
+          ]
+        }
+      },
+      "name": "Bybit Order Book",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        200,
+        -640
+      ],
+      "notesInFlow": true,
+      "notes": "GET /v2/public/orderBook/L2"
+    },
+    {
+      "parameters": {
+        "url": "https://api.bybit.com/v2/public/tickers",
+        "options": {},
+        "queryParametersUi": {
+          "parameter": [
+            {
+              "name": "symbol",
+              "value": "BTCUSD"
+            }
+          ]
+        }
+      },
+      "name": "Bybit Latest Information for Symbol",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        200,
+        -280
+      ],
+      "notesInFlow": true,
+      "notes": "GET /v2/public/tickers"
+    },
+    {
+      "parameters": {
+        "url": "https://api.bybit.com/v2/public/symbols",
+        "options": {}
+      },
+      "name": "Bybit Query Symbol",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        200,
+        140
+      ],
+      "notesInFlow": true,
+      "notes": "GET /v2/public/symbols"
+    },
+    {
+      "parameters": {
+        "url": "https://api.bybit.com/v2/public/trading-records",
+        "options": {},
+        "queryParametersUi": {
+          "parameter": [
+            {
+              "name": "symbol",
+              "value": "BTCUSD"
+            },
+            {
+              "name": "limit",
+              "value": "1000"
+            }
+          ]
+        }
+      },
+      "name": "Bybit Public Trading Records",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        200,
+        -60
+      ],
+      "notesInFlow": true,
+      "notes": "GET /v2/public/trading-records"
+    },
+    {
+      "parameters": {
+        "url": "https://api.bybit.com/v2/public/mark-price-kline",
+        "options": {},
+        "queryParametersUi": {
+          "parameter": [
+            {
+              "name": "symbol",
+              "value": "BTCUSD"
+            },
+            {
+              "name": "interval",
+              "value": "1"
+            },
+            {
+              "name": "from",
+              "value": "={{$node[\"Format1\"].json[\"date\"]}}"
+            },
+            {
+              "name": "limit",
+              "value": "200"
+            }
+          ]
+        }
+      },
+      "name": "Bybit Query Mark Price Kline",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        600,
+        340
+      ],
+      "notesInFlow": true,
+      "notes": "GET /v2/public/mark-price-kline"
+    },
+    {
+      "parameters": {
+        "action": "calculate",
+        "value": "=={{new Date()}}",
+        "operation": "subtract",
+        "duration": 60,
+        "timeUnit": "minutes",
+        "dataPropertyName": "date",
+        "options": {}
+      },
+      "name": "Date1",
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 1,
+      "position": [
+        200,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "value": "={{$node[\"Date1\"].parameter[\"value\"]}}",
+        "dataPropertyName": "date",
+        "custom": true,
+        "toFormat": "X",
+        "options": {}
+      },
+      "name": "Format1",
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 1,
+      "position": [
+        400,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "action": "calculate",
+        "value": "=={{new Date()}}",
+        "operation": "subtract",
+        "duration": 120,
+        "timeUnit": "minutes",
+        "dataPropertyName": "date",
+        "options": {}
+      },
+      "name": "Date2",
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 1,
+      "position": [
+        200,
+        560
+      ]
+    },
+    {
+      "parameters": {
+        "value": "={{$node[\"Date2\"].parameter[\"value\"]}}",
+        "dataPropertyName": "date",
+        "custom": true,
+        "toFormat": "X",
+        "options": {}
+      },
+      "name": "Format2",
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 1,
+      "position": [
+        400,
+        560
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://api.bybit.com/v2/public/index-price-kline",
+        "options": {},
+        "queryParametersUi": {
+          "parameter": [
+            {
+              "name": "symbol",
+              "value": "BTCUSD"
+            },
+            {
+              "name": "interval",
+              "value": "1"
+            },
+            {
+              "name": "from",
+              "value": "={{$node[\"Format2\"].json[\"date\"]}}"
+            },
+            {
+              "name": "limit",
+              "value": "200"
+            }
+          ]
+        }
+      },
+      "name": "Bybit Query Index Price Kline",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        600,
+        560
+      ],
+      "notesInFlow": true,
+      "notes": "GET /v2/public/index-price-kline"
+    },
+    {
+      "parameters": {
+        "action": "calculate",
+        "value": "=={{new Date()}}",
+        "operation": "subtract",
+        "duration": 60,
+        "timeUnit": "minutes",
+        "dataPropertyName": "date",
+        "options": {}
+      },
+      "name": "Date3",
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 1,
+      "position": [
+        200,
+        780
+      ]
+    },
+    {
+      "parameters": {
+        "value": "={{$node[\"Date3\"].parameter[\"value\"]}}",
+        "dataPropertyName": "date",
+        "custom": true,
+        "toFormat": "X",
+        "options": {}
+      },
+      "name": "Format3",
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 1,
+      "position": [
+        400,
+        780
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://api.bybit.com/v2/public/premium-index-kline",
+        "options": {},
+        "queryParametersUi": {
+          "parameter": [
+            {
+              "name": "symbol",
+              "value": "BTCUSD"
+            },
+            {
+              "name": "interval",
+              "value": "1"
+            },
+            {
+              "name": "from",
+              "value": "={{$node[\"Format3\"].json[\"date\"]}}"
+            },
+            {
+              "name": "limit",
+              "value": "200"
+            }
+          ]
+        }
+      },
+      "name": "Bybit Query Premium Index Kline",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        600,
+        780
+      ],
+      "notesInFlow": true,
+      "notes": "GET /v2/public/premium-index-kline"
+    },
+    {
+      "parameters": {
+        "url": "https://api.bybit.com/v2/public/open-interest",
+        "options": {},
+        "queryParametersUi": {
+          "parameter": [
+            {
+              "name": "symbol",
+              "value": "BTCUSD"
+            },
+            {
+              "name": "period",
+              "value": "5min"
+            },
+            {
+              "name": "limit",
+              "value": "200"
+            }
+          ]
+        }
+      },
+      "name": "Bybit Open Interest",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        200,
+        1000
+      ],
+      "notesInFlow": true,
+      "notes": "GET /v2/public/open-interest"
+    },
+    {
+      "parameters": {
+        "url": "https://api.bybit.com/v2/public/big-deal",
+        "options": {},
+        "queryParametersUi": {
+          "parameter": [
+            {
+              "name": "symbol",
+              "value": "BTCUSD"
+            },
+            {
+              "name": "limit",
+              "value": "1000"
+            }
+          ]
+        }
+      },
+      "name": "Bybit Latest Big Deal",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        200,
+        1180
+      ],
+      "notesInFlow": true,
+      "notes": "GET /v2/public/big-deal"
+    },
+    {
+      "parameters": {
+        "url": "https://api.bybit.com/v2/public/account-ratio",
+        "options": {},
+        "queryParametersUi": {
+          "parameter": [
+            {
+              "name": "symbol",
+              "value": "BTCUSD"
+            },
+            {
+              "name": "period",
+              "value": "5min"
+            },
+            {
+              "name": "limit",
+              "value": "500"
+            }
+          ]
+        }
+      },
+      "name": "Bybit Long-Short Ratio",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        200,
+        1360
+      ],
+      "notesInFlow": true,
+      "notes": "GET /v2/public/account-ratio"
+    }
+  ],
+  "connections": {
+    "Format": {
+      "main": [
+        [
+          {
+            "node": "Bybit Query Kline",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Date": {
+      "main": [
+        [
+          {
+            "node": "Format",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Date1": {
+      "main": [
+        [
+          {
+            "node": "Format1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format1": {
+      "main": [
+        [
+          {
+            "node": "Bybit Query Mark Price Kline",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Date2": {
+      "main": [
+        [
+          {
+            "node": "Format2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format2": {
+      "main": [
+        [
+          {
+            "node": "Bybit Query Index Price Kline",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Date3": {
+      "main": [
+        [
+          {
+            "node": "Format3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format3": {
+      "main": [
+        [
+          {
+            "node": "Bybit Query Premium Index Kline",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "id": 2
+}

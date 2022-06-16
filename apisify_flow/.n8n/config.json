@@ -1,0 +1,18 @@
+{
+  "security": {
+    "basicAuth": {
+      "active": true,
+      "user": "admin",
+      "password": "admin"
+    }
+  },
+  "userManagement": {
+    "disabled": true
+  },
+  "versionNotifications": {
+    "enabled": false
+  },
+  "personalization": {
+    "enabled": false
+  }
+}
