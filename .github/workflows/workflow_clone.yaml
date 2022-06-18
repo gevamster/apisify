@@ -6,7 +6,6 @@ on:
         type: choice
         description: Select a branch
         options:
-          - master
           - develop
           - stable
 
