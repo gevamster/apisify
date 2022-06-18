@@ -4,6 +4,8 @@ RUN apk add --update python3 py3-pip
 ENV APP_HOME /apisifyflow
 WORKDIR $APP_HOME
 COPY . $APP_HOME
+RUN mkdir -p /data/.n8n/
+RUN mv -n ./.n8n/config.json /data/.n8n/.
 
 ENV N8N_CONFIG_FILES /data/.n8n/config.json
 
