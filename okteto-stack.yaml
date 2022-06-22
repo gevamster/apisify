@@ -7,7 +7,7 @@ services:
       - 80:8080
     resources:
       cpu: 1000m
-      memory: 2Gi
+      memory: 1Gi
     volumes:
       - data:/data
 
@@ -19,7 +19,7 @@ services:
       - 80:8501
     resources:
       cpu: 1000m
-      memory: 3Gi
+      memory: 1Gi
     volumes:
       - data:/data
 
@@ -33,7 +33,7 @@ services:
       - DB_HOST=mysqldb://mysqldb:3306
     resources:
       cpu: 1000m
-      memory: 2Gi
+      memory: 1Gi
     volumes:
       - data:/data
 
